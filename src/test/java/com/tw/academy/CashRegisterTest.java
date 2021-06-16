@@ -1,5 +1,6 @@
 package com.tw.academy;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -47,12 +48,38 @@ class CashRegisterTest {
 		assertTrue(spyPrinter.printed);
 	}
 
+	@Test
+	void should_print_with_purchaseInfo_when_call_process_using_selfStubPurchase() {
+		SpyPrinter spyPrinter = new SpyPrinter();
+		CashRegister cashRegister = new CashRegister(spyPrinter);
+
+		StubPurchase stubPurchase = new StubPurchase();
+		String expected = "Buy an apply";
+		stubPurchase.purchaseInfo = expected;
+		cashRegister.process(stubPurchase);
+
+		assertTrue(spyPrinter.printed);
+		assertEquals(expected, spyPrinter.printContent);
+	}
+
 	private class SpyPrinter extends Printer {
 		private boolean printed;
+		private String printContent;
 
 		@Override
 		public void print(String content) {
+			printContent = content;
 			printed = true;
+		}
+	}
+
+	private class StubPurchase extends Purchase {
+
+		public String purchaseInfo;
+
+		@Override
+		public String asString() {
+			return purchaseInfo;
 		}
 	}
 }
