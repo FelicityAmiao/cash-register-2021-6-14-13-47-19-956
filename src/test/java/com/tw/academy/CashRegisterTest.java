@@ -1,16 +1,23 @@
 package com.tw.academy;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 import org.junit.jupiter.api.Test;
 
 class CashRegisterTest {
 	@Test
-	void should_process_execute_printing() {
+	void should_print_when_call_process() {
 		//given
-		CashRegister cashRegister = new CashRegister(new Printer());
-		Purchase purchase = new Purchase();
+		Printer spyPrinter = mock(Printer.class);
+		CashRegister cashRegister = new CashRegister(spyPrinter);
 		//when
-		cashRegister.process(purchase);
+		Purchase dummyPurchase = mock(Purchase.class);
+		cashRegister.process(dummyPurchase);
 		//then
 		//verify that cashRegister.process will trigger print
+		verify(spyPrinter, times(1)).print(anyString());
 	}
 }
