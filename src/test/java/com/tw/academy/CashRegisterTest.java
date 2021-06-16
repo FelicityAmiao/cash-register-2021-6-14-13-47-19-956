@@ -14,10 +14,10 @@ class CashRegisterTest {
 		Printer spyPrinter = mock(Printer.class);
 		CashRegister cashRegister = new CashRegister(spyPrinter);
 		//when
-		Purchase dummyPurchase = mock(Purchase.class);
-		cashRegister.process(dummyPurchase);
+		cashRegister.process(new Purchase());
 		//then
 		//verify that cashRegister.process will trigger print
 		verify(spyPrinter, times(1)).print(anyString());
 	}
+
 }
