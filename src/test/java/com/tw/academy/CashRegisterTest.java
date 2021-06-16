@@ -1,5 +1,6 @@
 package com.tw.academy;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -20,7 +21,7 @@ class CashRegisterTest {
 		//verify that cashRegister.process will trigger print
 		verify(spyPrinter, times(1)).print(anyString());
 	}
-	
+
 	@Test
 	void should_print_with_purchase_when_call_process() {
 		//given
@@ -36,4 +37,22 @@ class CashRegisterTest {
 		verify(spyPrinter, times(1)).print(expected);
 	}
 
+	@Test
+	void should_print_when_call_process_using_selfSpyPrinter() {
+		SpyPrinter spyPrinter = new SpyPrinter();
+		CashRegister cashRegister = new CashRegister(spyPrinter);
+
+		cashRegister.process(new Purchase());
+
+		assertTrue(spyPrinter.printed);
+	}
+
+	private class SpyPrinter extends Printer {
+		private boolean printed;
+
+		@Override
+		public void print(String content) {
+			printed = true;
+		}
+	}
 }
